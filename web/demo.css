@@ -1,0 +1,40 @@
+/*
+    Web Programming
+    Name: Alan Pedersen
+    ID: P225139
+    Date: 07/02/2020
+    Portfolio Activity 1 Page Navigation Demo
+    CSS file
+*/
+
+
+body {
+    background-color: lightblue;
+}
+  
+h1 {
+    color: black;
+    text-align: left;
+}
+  
+h2 {
+    text-align: left;
+    font-size: 16px;
+}
+  
+p {
+    font-family: verdana;
+    font-size: 12px;
+
+}
+
+ul {
+    font-family: verdana;
+    font-size: 16px;
+    list-style-type: none;
+    margin: 10;
+    padding: 20;
+    background-color: #dddddd;
+    width: 400px;
+
+}
