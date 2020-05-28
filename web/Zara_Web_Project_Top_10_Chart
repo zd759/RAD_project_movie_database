@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Name: Zara Duncanson
+     ID: P229768
+     Date: 30/03/20
+     Task: Project -->
+<head>
+    <title>Display - Chart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <a target="Home" href="index.php"><!--a link to home page-->
+        <img src="movie.jpg" alt="Movie Reel" align="left"/></a><!--where to find image-->
+        <h1>Movie Database</h1>
+    </div>
+    <nav class="navbar">
+        <ul class="main-nav">
+            <li class="main-li"><a href="index.php">Home</a></li>
+            <li class="main-li"><a href="search_movies.php">Search Movies</a></li>
+            <li class="main-li"><a class="active" href="display_movies.php">Display</a></li><!--inside display page, can select from left nav bar-->
+        </ul>
+    </nav>
+    <nav class="navbar">
+        <ul class="sidebar-nav">
+            <li class="side-li"><a href="show_all_movies.php">All Movies by Title</a></li>
+            <li class="side-li"><a href="show_top_ten_movies.php">Top 10 Searched</a></li>
+            <li class="side-li"><a class="active" href="show_top_ten_chart.php">Top 10 Chart</a></li>
+        </ul>
+    </nav>
+    <main>
+    <!--get template script for google graph-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
+    </script>
+    <script type="text/javascript">
+        //load google chart bar type
+        google.charts.load('current', {'packages':['bar']});
+        google.charts.setOnLoadCallback(drawChart);
+        //draw the x and y axis with labels
+        function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+        //specify headings on x and y axis
+        ['Movie Title', 'Searches' ],
+        <?php
+        //specify local host parameters
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "movies_db";
+        try {
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $conn->prepare(
+                "SELECT Title, Searched FROM movies 
+					ORDER BY Searched DESC 
+					LIMIT 10"
+            );
+            $stmt->execute();
+            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            //fetch query
+            foreach($stmt->fetchAll() as $k=>$row){  
+                echo "['".$row['Title']."', ".$row['Searched']."],";
+            }
+        }
+        catch(PDOException $e) {
+            echo "<br>";
+            echo "Error: " . $e->getMessage();
+        }
+        ?>
+        ]);
+        //Chart dimensions and allignment specified here
+        var options = {
+            height: 600,
+            width: 1150,
+            colors: ['#006622'],
+            is3D:true,
+            align: 'center',
+            hAxis: {
+                titleTextStyle: {
+                    fontSize: 16,
+                    color: '#006622',            
+                    },
+                textStyle: {
+                    fontSize: 9
+                    }
+                },
+            chart: {
+                title: 'Movie Searches',
+                subtitle: 'Movie Database 1930-2004',
+            }
+        };
+		//draw chart
+        var chart = new google.charts.Bar(document.getElementById
+        ('movie_chart'));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
+    </script>
+        <br><!--print chart-->
+        <div id="movie_chart" style="width: 1400px; height: 700px;"></div>
+    </main>
+    <footer class="footer">
+        <ul class="bottom-footer">
+            <li class="footer-li"><a href="ProjectReport_P229768.docx">FAQ</a></li>                                               
+            <li class="footer-li"><a href="https://www.w3schools.com/">Contact</a></li>
+        </ul>
+    </footer>
+</body>
+</html>
